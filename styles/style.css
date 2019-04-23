@@ -1,5 +1,5 @@
 .page {
-    background: #b7eddd;
+    background: #f4fbfc;
     width: 80%;
     margin: 0 auto;
 }
@@ -25,4 +25,29 @@ footer {
     font-style: italic;
     font-size: 8pt;
     text-align: center;
+}
+
+.row-form {
+    padding: 5px 0;
+}
+
+.form-input {
+    padding: 8px 11px;
+    width: 70%;
+    border-radius: 8px;
+}
+
+.form-label {
+
+}
+
+.button {
+    width: 100px;
+    padding: 5px 8px;
+    border-radius: 5px;
+}
+
+.button-primary {
+    background: #07aec4;
+    color: white;
 }
