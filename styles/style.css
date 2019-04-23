@@ -1,0 +1,28 @@
+.page {
+    background: #b7eddd;
+    width: 80%;
+    margin: 0 auto;
+}
+
+nav {
+    padding: 8px 0;
+}
+
+nav a {
+    padding: 8px 10px;
+    background: grey;
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background: brown;
+    color: white;
+}
+
+footer {
+    background: yellow;
+    font-style: italic;
+    font-size: 8pt;
+    text-align: center;
+}
