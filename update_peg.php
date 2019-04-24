@@ -1,25 +1,29 @@
 <?php
-$perintah = filter_input(INPUT_GET, 'com');
-if (isset($perintah) && $perintah == 'del') {
-    $id = filter_input(INPUT_GET, 'i');
-    deletePegData($id);
-}
+$id = filter_input(INPUT_GET, 'i');
+$pegawai = getOnePegData($id);
 
 $submitted = filter_input(INPUT_POST, 'btnSubmit');
 if (isset($submitted)) {
     $password = filter_input(INPUT_POST, 'txtPassword');
     $rePassword = filter_input(INPUT_POST, 'txtRePassword');
-    if ($password == $rePassword) {
+    if ($password == '' && $rePassword == '') {
         $nip = filter_input(INPUT_POST, 'txtNip');
         $fName = filter_input(INPUT_POST, 'txtNamaDepan');
         $lName = filter_input(INPUT_POST, 'txtNamaBelakang');
         $username = filter_input(INPUT_POST, 'txtUsername');
         $gender = filter_input(INPUT_POST, 'radioGender');
         $org = filter_input(INPUT_POST, 'comboOrg');
-        $result = addPegData($nip, $fName, $lName, $username, $password, $gender, $org);
-        if (isset($result) && trim($result) == '') {
-            $errMsg = "Error on query or duplicate NIP";
-        }
+        updatePegData($nip, $fName, $lName, $username, $pegawai['password'], $gender, $org);
+        header("location:index.php?mn=peg");
+    } elseif ($password == $rePassword) {
+        $nip = filter_input(INPUT_POST, 'txtNip');
+        $fName = filter_input(INPUT_POST, 'txtNamaDepan');
+        $lName = filter_input(INPUT_POST, 'txtNamaBelakang');
+        $username = filter_input(INPUT_POST, 'txtUsername');
+        $gender = filter_input(INPUT_POST, 'radioGender');
+        $org = filter_input(INPUT_POST, 'comboOrg');
+        updatePegData($nip, $fName, $lName, $username, $password, $gender, $org);
+        header("location:index.php?mn=peg");
     } else {
         $errMsg = "Password dan Re-type Password tidak sama";
     }
@@ -35,19 +39,19 @@ if (isset($errMsg)) {
         <legend>Input Pegawai</legend>
         <div class="row-form">
             <label for="txtNipId" class="form-label">NIP</label>
-            <input id="txtNipId" type="text" name="txtNip" autofocus placeholder="e.g. 123456789012" required maxlength="12" class="form-input">
+            <input id="txtNipId" type="text" name="txtNip" autofocus placeholder="e.g. 123456789012" required maxlength="12" class="form-input" readonly value="<?php echo $pegawai['nip']; ?>">
         </div>
         <div class="row-form">
             <label for="txtNamaDepanId" class="form-label">Nama Depan</label>
-            <input id="txtNamaDepanId" type="text" name="txtNamaDepan" placeholder="e.g. Johan" required class="form-input">
+            <input id="txtNamaDepanId" type="text" name="txtNamaDepan" placeholder="e.g. Johan" required class="form-input" value="<?php echo $pegawai['nama_depan']; ?>">
         </div>
         <div class="row-form">
             <label for="txtNamaBelakangId" class="form-label">Nama Belakang</label>
-            <input id="txtNamaBelakang" type="text" name="txtNamaBelakang" placeholder="e.g. Kusmono" class="form-input">
+            <input id="txtNamaBelakang" type="text" name="txtNamaBelakang" placeholder="e.g. Kusmono" class="form-input" value="<?php echo $pegawai['nama_belakang']; ?>">
         </div>
         <div class="row-form">
             <label for="txtUsernameId" class="form-label">Username</label>
-            <input id="txtUsernameId" type="text" name="txtUsername" placeholder="e.g. bright1234" class="form-input">
+            <input id="txtUsernameId" type="text" name="txtUsername" placeholder="e.g. bright1234" class="form-input" value="<?php echo $pegawai['username']; ?>">
         </div>
         <div class="row-form">
             <label for="txtPasswordId" class="form-label">Password</label>
@@ -59,8 +63,8 @@ if (isset($errMsg)) {
         </div>
         <div class="row-form">
             <label for="txtNamaId" class="form-label">Jenis Kelamin</label>
-            <input type="radio" name="radioGender" value="0" checked>Wanita
-            <input type="radio" name="radioGender" value="1">Pria
+            <input type="radio" name="radioGender" value="0" <?php echo $pegawai['jenis_kelamin'] == 0 ? "checked" : ""; ?>>Wanita
+            <input type="radio" name="radioGender" value="1" <?php echo $pegawai['jenis_kelamin'] == 1 ? "checked" : ""; ?>>Pria
         </div>
         <div class="row-form">
             <label for="comboOrgId" class="form-label">Organisasi</label>
@@ -68,43 +72,17 @@ if (isset($errMsg)) {
                 <?php
                 $result = getOrgData();
                 foreach ($result as $key => $value) {
-                    echo "<option value=" . $value['id'] . ">" . $value['nama'] . "</option>";
+                    if ($pegawai['tb_organisasi_id'] == $value['id']) {
+                        echo "<option value=" . $value['id'] . "selected>" . $value['nama'] . "</option>";
+                    } else {
+                        echo "<option value=" . $value['id'] . ">" . $value['nama'] . "</option>";
+                    }
                 }
                 ?>
             </select>
         </div>
         <div class="">
-            <input type="submit" name="btnSubmit" value="Simpan" class="button button-primary">
+            <input type="submit" name="btnSubmit" value="Update" class="button button-primary">
         </div>
     </fieldset>
 </form>
-
-<table  id="myTable" class="display">
-    <thead>
-        <tr>
-            <th>NIP</th>
-            <th>Nama Lengkap</th>
-            <th>Username</th>
-            <th>Jenis Kelamin</th>
-            <th>Organisasi</th>
-            <th>Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        $result = getPegData();
-        foreach ($result as $key => $value) {
-            echo "<tr>";
-            echo "<td>" . $value['nip'] . "</td>";
-            echo "<td>" . $value['nama_lengkap'] . "</td>";
-            echo "<td>" . $value['username'] . "</td>";
-            echo "<td>";
-            echo $value['jenis_kelamin'] ? "Pria" : "Wanita";
-            echo "</td>";
-            echo "<td>" . $value['nama'] . "</td>";
-            echo "<td><button onclick='editPeg(" . $value['nip'] . ");'>Edit</button><button onclick='deletePeg(" . $value['nip'] . ");'>Hapus</button></td>";
-            echo "</tr>";
-        }
-        ?>
-    </tbody>
-</table>

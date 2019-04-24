@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="../styles/styles.css"?>
+<!DOCTYPE bookstore
+[
+<!ELEMENT bookstore (book+)>
+<!ELEMENT book (title, author, year, price)>
+<!ATTLIST book category CDATA #IMPLIED>
+<!ELEMENT title (#PCDATA)>
+<!ATTLIST title lang CDATA #IMPLIED>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT year (#PCDATA)>
+<!ELEMENT price (#PCDATA)>
+]>
+<bookstore>
+    <book category="Comic">
+        <title lang="in">Detective Kindaichi Premium 11</title>
+        <author>Fumiya Sato</author>
+        <year>2018</year>
+        <price>35000</price>
+    </book>
+    <book category="Comic">
+        <title lang="in">Detective Kindaichi Premium 12</title>
+        <author>Fumiya Sato</author>
+        <year>2019</year>
+        <price>35000</price>
+    </book>
+    <book category="Children">
+        <title lang="in">Thomas and Friends: A Little Hometown</title>
+        <author>-</author>
+        <year>2018</year>
+        <price>45000</price>
+    </book>
+    <book category="Comic">
+        <title lang="in">Detective Conan 96</title>
+        <author>Aoyama Gosho</author>
+        <year>2018</year>
+        <price>25000</price>
+    </book>
+</bookstore>

@@ -40,7 +40,7 @@ if (isset($submitted)) {
             echo "<tr>";
             echo "<td>" . $value['id'] . "</td>";
             echo "<td>" . $value['nama'] . "</td>";
-            echo "<td><button onclick='deleteOrg(" . $value['id'] . ");'>Hapus</button></td>";
+            echo "<td><button onclick='editOrg(" . $value['id'] . ");'>Edit</button><button onclick='deleteOrg(" . $value['id'] . ");'>Hapus</button></td>";
             echo "</tr>";
         }
         ?>
